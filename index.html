@@ -1,0 +1,59 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <textarea id="encrypttext" type="text" style="width: 100%;margin-bottom: 5px;"></textarea>
+    <button id="encrypt">encrypt</button>
+    <pre id="encrypteddata"></pre><button id="encryptedcopy">copy</button>
+    <p></p>
+    <textarea id="decrypttext" type="text" style="width: 100%;margin-bottom: 5px;"></textarea>
+    <button id="decrypt">decrypt</button>
+    <pre id="decrypteddata"></pre><button id="decryptedcopy">copy</button>
+    <!-- <script type="text/javascript" src="path-to/bower_components/crypto-js/crypto-js.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script type="text/javascript">
+        // var encrypted = CryptoJS.AES.encrypted();
+        // var encrypted = CryptoJS.SHA256(...);
+        // var ciphertext = CryptoJS.AES.encrypt('my message', 'secret key 123').toString();
+        // console.log(ciphertext);
+        document.getElementById("encrypt").onclick = function () {
+            encryptData(document.getElementById("encrypttext").value);
+        }
+        document.getElementById("decrypt").onclick = function () {
+            decryptData(document.getElementById("decrypttext").value);
+        }
+        document.getElementById("encryptedcopy").onclick = function () {
+            navigator.clipboard.writeText(document.getElementById("encrypteddata").innerHTML);
+        }
+        document.getElementById("decryptedcopy").onclick = function () {
+            navigator.clipboard.writeText(document.getElementById("decrypteddata").innerHTML);
+        }
+        const encryption = {
+            key: "DBhEDhP4uk2TPUpdmp9yXBgYiH6ja5pp",
+            iv: "2847798601523929"
+        }
+        function encryptData(data) {
+            var encryptStringifiedData = JSON.stringify(data);
+            var key  = CryptoJS.enc.Latin1.parse(encryption.key);
+            var iv   = CryptoJS.enc.Latin1.parse(encryption.iv);  
+            var encryptedData = CryptoJS.AES.encrypt(
+                encryptStringifiedData,
+                key,
+                {iv:iv,mode: CryptoJS.mode.CBC,padding: CryptoJS.pad.ZeroPadding
+            });
+            console.log('encrypted: ' + encryptedData) ;
+            document.getElementById("encrypteddata").innerHTML =  encryptedData.toString();
+        }
+
+        function decryptData(encryptedData) {
+            var key  = CryptoJS.enc.Latin1.parse(encryption.key);
+            var iv   = CryptoJS.enc.Latin1.parse(encryption.iv); 
+            var decrypted = CryptoJS.AES.decrypt(encryptedData,key,{iv:iv,padding: CryptoJS.pad.ZeroPadding});
+            console.log('decrypted: '+decrypted.toString(CryptoJS.enc.Utf8));
+            document.getElementById("decrypteddata").innerHTML = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).trim());
+        }
+    </script>
+</body>
