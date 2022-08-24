@@ -53,7 +53,7 @@
             var iv   = CryptoJS.enc.Latin1.parse(encryption.iv); 
             var decrypted = CryptoJS.AES.decrypt(encryptedData,key,{iv:iv,padding: CryptoJS.pad.ZeroPadding});
             console.log('decrypted: '+decrypted.toString(CryptoJS.enc.Utf8));
-            document.getElementById("decrypteddata").innerHTML = JSON.parse(decrypted.toString(CryptoJS.enc.Utf8).trim());
+            document.getElementById("decrypteddata").innerHTML = decrypted.toString(CryptoJS.enc.Utf8).trim();
         }
     </script>
 </body>
